@@ -80,6 +80,8 @@ async function upsertMatch(data: {
   awayTeamId: string | null
   homeScore: number | null
   awayScore: number | null
+  homePenaltyScore: number | null
+  awayPenaltyScore: number | null
   winner: MatchWinner | null
   placeholderA: string | null
   placeholderB: string | null
@@ -143,6 +145,8 @@ export async function syncMatches() {
       awayTeamId: fm.Away ? awayTeam?.id ?? null : null,
       homeScore: fm.HomeTeamScore ?? null,
       awayScore: fm.AwayTeamScore ?? null,
+      homePenaltyScore: fm.HomeTeamPenaltyScore ?? null,
+      awayPenaltyScore: fm.AwayTeamPenaltyScore ?? null,
       winner: apiWinner,
       placeholderA: fm.PlaceHolderA,
       placeholderB: fm.PlaceHolderB,

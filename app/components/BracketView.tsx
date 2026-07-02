@@ -43,11 +43,13 @@ function TeamRow({
   team,
   placeholder,
   score,
+  penaltyScore,
   isWinner,
 }: {
   team?: Team | null
   placeholder?: string | null
   score?: number | null
+  penaltyScore?: number | null
   isWinner?: boolean
 }) {
   const name = team?.name || placeholder || 'TBD'
@@ -74,6 +76,9 @@ function TeamRow({
       {score !== undefined && score !== null && (
         <span className={`text-sm font-bold tabular-nums shrink-0 ${isWinner ? 'text-accent-dark' : 'text-slate-500'}`}>
           {score}
+          {penaltyScore !== undefined && penaltyScore !== null && (
+            <span className="text-xs font-medium text-slate-400 ml-1">({penaltyScore})</span>
+          )}
         </span>
       )}
     </div>
@@ -83,6 +88,7 @@ function TeamRow({
 function MatchCard({ match, extra }: { match: MatchWithTeams; extra?: React.ReactNode }) {
   const homeWinner = match.winner === 'HOME'
   const awayWinner = match.winner === 'AWAY'
+  const hasPenalties = match.homePenaltyScore !== null && match.awayPenaltyScore !== null
 
   return (
     <div className="surface p-3 hover:border-slate-300 transition-colors">
@@ -94,14 +100,21 @@ function MatchCard({ match, extra }: { match: MatchWithTeams; extra?: React.Reac
         team={match.homeTeam}
         placeholder={match.placeholderA}
         score={match.homeScore}
+        penaltyScore={hasPenalties ? match.homePenaltyScore : undefined}
         isWinner={homeWinner}
       />
       <TeamRow
         team={match.awayTeam}
         placeholder={match.placeholderB}
         score={match.awayScore}
+        penaltyScore={hasPenalties ? match.awayPenaltyScore : undefined}
         isWinner={awayWinner}
       />
+      {hasPenalties && (
+        <div className="mt-2 text-[10px] font-bold uppercase tracking-wider text-center text-slate-400">
+          Definido por penales
+        </div>
+      )}
       {extra && <div className="mt-2 pt-2 border-t border-slate-100">{extra}</div>}
     </div>
   )

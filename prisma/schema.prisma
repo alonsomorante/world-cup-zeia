@@ -40,6 +40,8 @@ model Match {
   awayTeam       Team?         @relation("AwayTeam", fields: [awayTeamId], references: [id])
   homeScore      Int?
   awayScore      Int?
+  homePenaltyScore Int?
+  awayPenaltyScore Int?
   winner         MatchWinner?
   placeholderA   String?
   placeholderB   String?

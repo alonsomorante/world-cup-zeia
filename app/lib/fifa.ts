@@ -17,6 +17,8 @@ export interface FifaMatch {
   Away: FifaTeam | null
   HomeTeamScore: number | null
   AwayTeamScore: number | null
+  HomeTeamPenaltyScore: number | null
+  AwayTeamPenaltyScore: number | null
   Winner: 'HOME_TEAM' | 'AWAY_TEAM' | 'DRAW' | null
   PlaceHolderA: string
   PlaceHolderB: string

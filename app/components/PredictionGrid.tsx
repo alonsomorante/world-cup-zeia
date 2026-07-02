@@ -165,7 +165,10 @@ export default function PredictionGrid({
               <div className="mt-3 pt-3 border-t border-slate-100 text-sm text-slate-500">
                 Resultado:{' '}
                 <span className="font-semibold text-slate-900">
-                  {winnerLabel(match)} ({match.homeScore} - {match.awayScore})
+                  {winnerLabel(match)} ({match.homeScore} - {match.awayScore}
+                  {match.homePenaltyScore !== null && match.awayPenaltyScore !== null && (
+                    <span className="text-slate-400"> · penales {match.homePenaltyScore}-{match.awayPenaltyScore}</span>
+                  )})
                 </span>
               </div>
             )}
