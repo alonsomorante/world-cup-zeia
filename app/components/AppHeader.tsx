@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function AppHeader({ isAdmin = false }: { isAdmin?: boolean }) {
@@ -7,8 +8,14 @@ export default function AppHeader({ isAdmin = false }: { isAdmin?: boolean }) {
     <header className="bg-white border-b-4 border-[#1a5f2a] sticky top-0 z-50 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#1a5f2a] flex items-center justify-center text-white font-display text-xl border-2 border-[#ffd700]">
-            26
+          <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-[#ffd700]">
+            <Image
+              src="/kiara.jpeg"
+              alt="Kiara"
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
           <span className="font-display text-2xl text-[#1a1a1a] tracking-wide">
             MUNDIAL ZEIA

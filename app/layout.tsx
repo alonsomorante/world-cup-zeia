@@ -14,7 +14,7 @@ const crimsonPro = Crimson_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Quiniela Mundial 2026",
+  title: "Mundial Zeia",
   description: "Adivina los resultados con tus compañeros de trabajo",
 };
 
