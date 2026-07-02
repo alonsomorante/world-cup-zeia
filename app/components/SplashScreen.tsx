@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 
 function Splash({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
-    const timer = setTimeout(onComplete, 1800)
+    const timer = setTimeout(onComplete, 1400)
     return () => clearTimeout(timer)
   }, [onComplete])
 
