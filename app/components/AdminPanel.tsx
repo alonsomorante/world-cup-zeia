@@ -50,18 +50,31 @@ function isLocked(match: MatchWithTeams): boolean {
   return new Date(match.utcDate) <= new Date()
 }
 
-function TeamBox({
+function formatDate(date: Date | string): string {
+  const d = new Date(date)
+  return d.toLocaleString('es-ES', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+}
+
+function TeamOption({
   team,
   placeholder,
   selected,
   onClick,
   disabled,
+  label,
 }: {
   team?: Team | null
   placeholder?: string | null
   selected: boolean
   onClick: () => void
   disabled: boolean
+  label: string
 }) {
   const name = team?.name || placeholder || 'TBD'
   const flag = getFlagUrl(team?.code)
@@ -71,24 +84,25 @@ function TeamBox({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`flex-1 flex flex-col items-center justify-center gap-2 rounded-xl border-2 transition-all p-3 ${
-        selected
-          ? 'border-[#22c55e] bg-[#22c55e]/10'
-          : 'border-[#2a2a2a] bg-[#161616] hover:border-[#3a3a3a]'
+      className={`team-option flex-1 flex flex-col items-center justify-center gap-2 p-4 ${
+        selected ? 'selected' : ''
       } disabled:opacity-60 disabled:cursor-not-allowed`}
     >
+      <span className="text-xs font-display uppercase tracking-wide text-[#4a4539]">
+        {label}
+      </span>
       {flag ? (
         <Image
           src={flag}
           alt={name}
-          width={48}
-          height={32}
-          className="object-cover rounded-md w-12 h-8"
+          width={56}
+          height={38}
+          className="object-cover rounded-md w-14 h-9 shadow-sm"
         />
       ) : (
-        <div className="w-12 h-8 rounded-md bg-[#2a2a2a]" />
+        <div className="w-14 h-9 rounded-md bg-[#f7f3e8] border-2 border-dashed border-[#efe9d8]" />
       )}
-      <span className="text-xs font-bold text-center leading-tight text-white">
+      <span className="font-display text-lg text-[#1a1a1a] text-center leading-tight">
         {name}
       </span>
     </button>
@@ -110,11 +124,13 @@ export default function AdminPanel({
   const [updatingImage, setUpdatingImage] = useState(false)
   const [message, setMessage] = useState('')
 
+  const selectedUser = users.find((u) => u.id === selectedUserId)
+
   function buildStateForUser(userId: string) {
-    const selectedUser = users.find((u) => u.id === userId)
+    const user = users.find((u) => u.id === userId)
     const predictionMap = new Map<string, PredictionWithMatch>()
-    if (selectedUser?.predictions) {
-      for (const pred of selectedUser.predictions) {
+    if (user?.predictions) {
+      for (const pred of user.predictions) {
         predictionMap.set(pred.matchId, pred)
       }
     }
@@ -128,7 +144,6 @@ export default function AdminPanel({
   }
 
   function getPredictionForMatch(matchId: string): PredictionWithMatch | undefined {
-    const selectedUser = users.find((u) => u.id === selectedUserId)
     return selectedUser?.predictions.find((p) => p.matchId === matchId)
   }
 
@@ -148,7 +163,10 @@ export default function AdminPanel({
     })
   }
 
-  async function handleImageChange(e: React.ChangeEvent<HTMLInputElement>, setter: (url: string | null) => void) {
+  async function handleImageChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    setter: (url: string | null) => void
+  ) {
     const file = e.target.files?.[0]
     if (!file) {
       setter(null)
@@ -267,30 +285,30 @@ export default function AdminPanel({
       <form action={handleLogout} className="flex justify-end">
         <button
           type="submit"
-          className="text-sm text-gray-400 hover:text-white transition-colors"
+          className="text-sm text-[#4a4539] hover:text-[#1a5f2a] transition-colors underline"
         >
           Cerrar sesión de admin
         </button>
       </form>
 
       {/* Player management */}
-      <div className="bg-[#1e1e1e] rounded-2xl border border-[#2a2a2a] p-6">
-        <h2 className="text-lg font-bold text-white mb-4">Jugadores</h2>
+      <div className="bg-white rounded-2xl border-2 border-[#1a5f2a] p-6 shadow-[0_4px_0_rgba(0,0,0,0.06)]">
+        <h2 className="font-display text-2xl text-[#1a1a1a] mb-4">Jugadores</h2>
 
-        <form action={handleCreatePlayer} className="space-y-4 mb-4">
+        <form action={handleCreatePlayer} className="space-y-4 mb-6 p-4 bg-[#f7f3e8] rounded-xl">
           <div className="flex gap-3">
             <input
               name="name"
               value={newPlayerName}
               onChange={(e) => setNewPlayerName(e.target.value)}
               placeholder="Nombre del compañero"
-              className="flex-1 h-12 bg-[#121212] text-white px-4 rounded-xl border border-[#3a3a3a] focus:border-[#22c55e] focus:outline-none"
+              className="flex-1 h-12 px-4 bg-white border-2 border-[#efe9d8] rounded-lg focus:border-[#1a5f2a] focus:outline-none"
             />
             <input type="hidden" name="imageUrl" value={newPlayerImage || ''} />
             <button
               type="submit"
               disabled={creating}
-              className="bg-[#22c55e] text-[#121212] font-bold px-6 rounded-xl hover:bg-[#16a34a] transition-colors disabled:opacity-60"
+              className="btn-primary px-6 disabled:opacity-60"
             >
               {creating ? '...' : 'Crear'}
             </button>
@@ -301,22 +319,25 @@ export default function AdminPanel({
               type="file"
               accept="image/*"
               onChange={(e) => handleImageChange(e, setNewPlayerImage)}
-              className="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-[#2a2a2a] file:text-white hover:file:bg-[#3a3a3a]"
+              className="text-sm text-[#4a4539] file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#1a5f2a] file:text-white hover:file:bg-[#2d8a3e]"
             />
             {newPlayerImage && (
-              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#22c55e]">
+              <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#ffd700]">
                 <Image src={newPlayerImage} alt="Preview" fill className="object-cover" />
               </div>
             )}
           </div>
         </form>
 
+        <label className="block font-display uppercase tracking-wide text-[#4a4539] mb-2">
+          Seleccionar jugador
+        </label>
         <select
           value={selectedUserId}
           onChange={(e) => selectUser(e.target.value)}
-          className="w-full h-12 bg-[#121212] text-white px-4 rounded-xl border border-[#3a3a3a] focus:border-[#22c55e] focus:outline-none"
+          className="w-full h-12 px-4 bg-[#f7f3e8] border-2 border-[#efe9d8] rounded-lg focus:border-[#1a5f2a] focus:outline-none text-[#1a1a1a]"
         >
-          <option value="">Selecciona un jugador</option>
+          <option value="">-- Elige un jugador --</option>
           {users.map((u) => (
             <option key={u.id} value={u.id}>
               {u.name}
@@ -324,27 +345,26 @@ export default function AdminPanel({
           ))}
         </select>
 
-        {selectedUserId && (
-          <div className="mt-6 pt-6 border-t border-[#2a2a2a]">
-            <h3 className="text-sm font-bold text-gray-400 mb-3">Foto del jugador</h3>
+        {selectedUser && (
+          <div className="mt-6 pt-6 border-t-2 border-dashed border-[#efe9d8]">
+            <h3 className="font-display uppercase tracking-wide text-[#4a4539] mb-3">
+              Foto del jugador
+            </h3>
             <div className="flex items-center gap-4">
-              {(() => {
-                const selectedUser = users.find((u) => u.id === selectedUserId)
-                return selectedUser?.imageUrl ? (
-                  <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#22c55e]">
-                    <Image
-                      src={selectedUser.imageUrl}
-                      alt={selectedUser.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="w-14 h-14 rounded-full bg-[#2a2a2a] flex items-center justify-center text-gray-500 text-xs">
-                    Sin foto
-                  </div>
-                )
-              })()}
+              {selectedUser.imageUrl ? (
+                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#1a5f2a]">
+                  <Image
+                    src={selectedUser.imageUrl}
+                    alt={selectedUser.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-[#1a5f2a] flex items-center justify-center text-white font-display text-2xl">
+                  {selectedUser.name.charAt(0).toUpperCase()}
+                </div>
+              )}
               <input
                 type="file"
                 accept="image/*"
@@ -363,9 +383,9 @@ export default function AdminPanel({
                   }
                 }}
                 disabled={updatingImage}
-                className="text-sm text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:bg-[#2a2a2a] file:text-white hover:file:bg-[#3a3a3a] disabled:opacity-60"
+                className="text-sm text-[#4a4539] file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-[#1a5f2a] file:text-white hover:file:bg-[#2d8a3e] disabled:opacity-60"
               />
-              {updatingImage && <span className="text-gray-400 text-sm">Subiendo...</span>}
+              {updatingImage && <span className="text-[#4a4539] text-sm">Subiendo...</span>}
             </div>
           </div>
         )}
@@ -373,21 +393,21 @@ export default function AdminPanel({
 
       {message && (
         <div
-          className={`p-3 rounded-xl text-sm ${
+          className={`p-4 rounded-xl text-sm ${
             message.includes('Error') || message.includes('incorrecta') || message.includes('existe')
-              ? 'bg-red-500/10 border border-red-500/30 text-red-400'
-              : 'bg-[#22c55e]/10 border border-[#22c55e]/30 text-[#22c55e]'
+              ? 'bg-[#d93025]/10 border border-[#d93025]/30 text-[#d93025]'
+              : 'bg-[#1a5f2a]/10 border border-[#1a5f2a]/30 text-[#1a5f2a]'
           }`}
         >
           {message}
         </div>
       )}
 
-      {selectedUserId && (
+      {selectedUser && (
         <>
           {grouped.map(([stage, stageMatches]) => (
-            <div key={stage} className="bg-[#1e1e1e] rounded-2xl border border-[#2a2a2a] p-6">
-              <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">
+            <div key={stage} className="bg-white rounded-2xl border-2 border-[#efe9d8] p-6 shadow-[0_4px_0_rgba(0,0,0,0.06)]">
+              <h2 className="font-display text-xl text-[#1a5f2a] uppercase tracking-wide mb-4">
                 {STAGE_LABELS[stage] || stage}
               </h2>
               <div className="grid gap-4 md:grid-cols-2">
@@ -399,44 +419,48 @@ export default function AdminPanel({
                   return (
                     <div
                       key={match.id}
-                      className={`bg-[#161616] rounded-2xl border border-[#2a2a2a] p-4 ${
+                      className={`bg-[#f7f3e8] rounded-xl border-2 border-[#efe9d8] p-4 ${
                         locked ? 'opacity-70' : ''
                       }`}
                     >
-                      <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-                        <span>{new Date(match.utcDate).toLocaleString('es-ES')}</span>
-                        {locked && <span className="text-orange-400">Cerrado</span>}
+                      <div className="flex items-center justify-between text-sm text-[#4a4539] mb-3">
+                        <span className="font-medium">{formatDate(match.utcDate)}</span>
+                        {locked && (
+                          <span className="bg-[#d93025] text-white text-xs px-2 py-0.5 rounded-full uppercase tracking-wide">
+                            Cerrado
+                          </span>
+                        )}
                       </div>
 
-                      <div className="flex items-center justify-center gap-3">
-                        <TeamBox
+                      <div className="flex items-stretch gap-2">
+                        <TeamOption
                           team={match.homeTeam}
                           placeholder={match.placeholderA}
                           selected={winner === 'HOME'}
                           onClick={() => updateWinner(match.id, 'HOME')}
                           disabled={locked}
+                          label="Local"
                         />
-                        <div className="flex flex-col items-center gap-2">
-                          <span className="text-gray-500 font-bold">VS</span>
-                          <button
-                            type="button"
-                            onClick={() => updateWinner(match.id, 'DRAW')}
-                            disabled={locked}
-                            className={`text-[10px] font-bold uppercase rounded-full border transition-colors px-2 py-1 ${
-                              winner === 'DRAW'
-                                ? 'bg-[#22c55e] text-[#121212] border-[#22c55e]'
-                                : 'border-[#3a3a3a] text-gray-400 hover:text-white'
-                            } disabled:opacity-50`}
-                          >
-                            Empate
-                          </button>
-                        </div>
-                        <TeamBox
+
+                        <button
+                          type="button"
+                          onClick={() => updateWinner(match.id, 'DRAW')}
+                          disabled={locked}
+                          className={`team-option draw px-3 flex flex-col items-center justify-center gap-1 ${
+                            winner === 'DRAW' ? 'selected' : ''
+                          } disabled:opacity-60`}
+                        >
+                          <span className="text-xs font-display uppercase text-[#4a4539]">Empate</span>
+                          <span className="text-2xl">⚖️</span>
+                        </button>
+
+                        <TeamOption
                           team={match.awayTeam}
                           placeholder={match.placeholderB}
                           selected={winner === 'AWAY'}
                           onClick={() => updateWinner(match.id, 'AWAY')}
                           disabled={locked}
+                          label="Visitante"
                         />
                       </div>
 
@@ -444,7 +468,7 @@ export default function AdminPanel({
                         <button
                           type="button"
                           onClick={() => handleDeletePrediction(match.id)}
-                          className="mt-3 w-full text-xs text-red-400 hover:text-red-300 transition-colors"
+                          className="mt-3 w-full text-sm text-[#d93025] hover:text-[#b71c1c] transition-colors underline"
                         >
                           Borrar predicción
                         </button>
@@ -456,11 +480,11 @@ export default function AdminPanel({
             </div>
           ))}
 
-          <div className="fixed bottom-0 left-0 right-0 bg-[#1e1e1e]/95 backdrop-blur border-t border-[#2a2a2a] p-4 flex justify-center z-40">
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-[#1a5f2a] p-4 flex justify-center z-40 shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
             <button
               onClick={handleSave}
               disabled={saving}
-              className="bg-[#22c55e] text-[#121212] font-bold px-10 py-3 rounded-xl hover:bg-[#16a34a] active:scale-[0.98] transition-all disabled:opacity-60"
+              className="btn-primary px-12 py-3 text-xl disabled:opacity-60"
             >
               {saving ? 'Guardando...' : 'Guardar predicciones'}
             </button>

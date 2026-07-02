@@ -43,37 +43,38 @@ export default async function PlayerPage({ params }: PageProps) {
   const winners = user.predictions.filter((p) => p.pointsEarned >= 1).length
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-[#f7f3e8]">
       <AppHeader />
 
-      <main className="max-w-6xl mx-auto px-4 py-6 pb-28">
-        <div className="mb-6 flex items-center gap-4">
+      <main className="max-w-6xl mx-auto px-4 py-8 pb-28">
+        <div className="bg-white rounded-2xl border-2 border-[#1a5f2a] p-6 mb-6 shadow-[0_4px_0_rgba(0,0,0,0.06)] flex items-center gap-5">
           {user.imageUrl ? (
-            <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-[#22c55e]">
+            <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#ffd700] shadow-md">
               <Image src={user.imageUrl} alt={user.name} fill className="object-cover" />
             </div>
           ) : (
-            <div className="w-16 h-16 rounded-full bg-[#2a2a2a] flex items-center justify-center text-gray-500 text-xl font-bold">
+            <div className="w-20 h-20 rounded-full bg-[#1a5f2a] flex items-center justify-center text-white font-display text-3xl border-4 border-[#ffd700]">
               {user.name.charAt(0).toUpperCase()}
             </div>
           )}
           <div>
-            <h1 className="text-2xl font-bold text-white mb-1">{user.name}</h1>
-            <p className="text-gray-400 text-sm">
-              {totalPoints} puntos · {winners} aciertos
+            <h1 className="font-display text-4xl text-[#1a1a1a]">{user.name}</h1>
+            <p className="text-[#4a4539] text-lg">
+              <span className="font-display text-2xl text-[#1a5f2a]">{totalPoints}</span> puntos ·{' '}
+              <span className="font-display text-2xl text-[#1a5f2a]">{winners}</span> aciertos
             </p>
           </div>
         </div>
 
-        <div className="mb-6 bg-[#1e1e1e] rounded-2xl border border-[#2a2a2a] p-4">
-          <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">
+        <div className="mb-6 bg-white rounded-2xl border-2 border-[#efe9d8] p-5 shadow-[0_4px_0_rgba(0,0,0,0.05)]">
+          <h2 className="font-display text-2xl text-[#1a5f2a] uppercase tracking-wide mb-4">
             Historial de predicciones
           </h2>
           <PredictionGrid predictions={user.predictions} />
         </div>
 
-        <div className="bg-[#1e1e1e] rounded-2xl border border-[#2a2a2a] p-4">
-          <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">
+        <div className="bg-white rounded-2xl border-2 border-[#efe9d8] p-5 shadow-[0_4px_0_rgba(0,0,0,0.05)]">
+          <h2 className="font-display text-2xl text-[#1a5f2a] uppercase tracking-wide mb-4">
             Bracket de predicciones
           </h2>
           <PredictionBracket predictions={user.predictions} />

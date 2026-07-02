@@ -18,13 +18,13 @@ export default async function BracketPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-[#f7f3e8]">
       <AppHeader />
 
-      <main className="max-w-6xl mx-auto px-4 py-6 pb-28">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Bracket</h1>
-          <p className="text-gray-400 text-sm">Así quedaron los cruces del Mundial.</p>
+      <main className="max-w-6xl mx-auto px-4 py-8 pb-28">
+        <div className="text-center mb-8">
+          <h1 className="font-display text-5xl text-[#1a1a1a] mb-2">Bracket del Mundial</h1>
+          <p className="text-[#4a4539] text-lg">Así quedaron los cruces del Mundial 2026</p>
         </div>
 
         <BracketView matches={matches} />

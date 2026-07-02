@@ -29,14 +29,17 @@ export default async function HomePage() {
     .sort((a, b) => b.points - a.points || b.winners - a.winners)
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-[#f7f3e8]">
       <AppHeader />
 
-      <main className="max-w-3xl mx-auto px-4 py-6 pb-28">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Ranking</h1>
-          <p className="text-gray-400 text-sm">
-            Así van tus compañeros en la quiniela. Haz click en un nombre para ver su historial.
+      <main className="max-w-2xl mx-auto px-4 py-8 pb-28">
+        <div className="text-center mb-8">
+          <div className="inline-block bg-[#1a5f2a] text-white px-4 py-1 rounded-full text-sm font-display uppercase tracking-wider mb-3">
+            Mundial 2026
+          </div>
+          <h1 className="font-display text-5xl text-[#1a1a1a] mb-2">Tabla de Posiciones</h1>
+          <p className="text-[#4a4539] text-lg">
+            Así van tus compañeros en la quiniela
           </p>
         </div>
 

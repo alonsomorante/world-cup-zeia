@@ -5,6 +5,8 @@ import AppHeader from '@/app/components/AppHeader'
 import AdminLogin from '@/app/components/AdminLogin'
 import AdminPanel from '@/app/components/AdminPanel'
 
+export const dynamic = 'force-dynamic'
+
 export default async function AdminPage() {
   const isAdmin = await getAdminSession()
 
@@ -36,14 +38,14 @@ export default async function AdminPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#121212]">
+    <div className="min-h-screen bg-[#f7f3e8]">
       <AppHeader isAdmin={isAdmin} />
 
-      <main className="max-w-5xl mx-auto px-4 py-6 pb-28">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-white mb-1">Administración</h1>
-          <p className="text-gray-400 text-sm">
-            Registra y edita las predicciones de tus compañeros.
+      <main className="max-w-5xl mx-auto px-4 py-8 pb-28">
+        <div className="text-center mb-8">
+          <h1 className="font-display text-5xl text-[#1a1a1a] mb-2">Administración</h1>
+          <p className="text-[#4a4539] text-lg">
+            Registra y edita las predicciones de tus compañeros
           </p>
         </div>
 

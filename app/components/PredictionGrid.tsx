@@ -52,7 +52,7 @@ function predictedWinnerLabel(
 function StatusBadge({ points, hasResult }: { points: number; hasResult: boolean }) {
   if (!hasResult) {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-800 text-gray-400">
+      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-display uppercase tracking-wide bg-[#efe9d8] text-[#4a4539]">
         Pendiente
       </span>
     )
@@ -60,14 +60,14 @@ function StatusBadge({ points, hasResult }: { points: number; hasResult: boolean
 
   if (points > 0) {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#22c55e]/20 text-[#22c55e]">
+      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-display uppercase tracking-wide bg-[#1a5f2a] text-white">
         +{points} pt
       </span>
     )
   }
 
   return (
-    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-500/20 text-red-400">
+    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-display uppercase tracking-wide bg-[#d93025] text-white">
       Falló
     </span>
   )
@@ -89,12 +89,12 @@ function TeamBox({
 
   return (
     <div
-      className={`flex-1 flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-3 ${
+      className={`flex-1 flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 ${
         isActual
-          ? 'border-[#22c55e] bg-[#22c55e]/10'
+          ? 'border-[#1a5f2a] bg-[#1a5f2a]/10'
           : isPredicted
-          ? 'border-[#3b82f6] bg-[#3b82f6]/10'
-          : 'border-[#2a2a2a] bg-[#161616]'
+          ? 'border-[#d4af37] bg-[#ffd700]/15'
+          : 'border-[#efe9d8] bg-white'
       }`}
     >
       {flag ? (
@@ -103,14 +103,14 @@ function TeamBox({
           alt={name}
           width={48}
           height={32}
-          className="object-cover rounded-md w-12 h-8"
+          className="object-cover rounded-md w-14 h-9 shadow-sm"
         />
       ) : (
-        <div className="w-12 h-8 rounded-md bg-[#2a2a2a]" />
+        <div className="w-14 h-9 rounded-md bg-[#f7f3e8] border-2 border-dashed border-[#efe9d8]" />
       )}
       <span
-        className={`text-xs font-bold text-center leading-tight ${
-          isActual ? 'text-[#22c55e]' : isPredicted ? 'text-[#3b82f6]' : 'text-white'
+        className={`text-sm font-semibold text-center leading-tight ${
+          isActual ? 'text-[#1a5f2a]' : isPredicted ? 'text-[#1a1a1a]' : 'text-[#4a4539]'
         }`}
       >
         {name}
@@ -139,10 +139,10 @@ export default function PredictionGrid({
         return (
           <div
             key={pred.id}
-            className="bg-[#161616] rounded-2xl border border-[#2a2a2a] p-4"
+            className="bg-white rounded-2xl border-2 border-[#efe9d8] p-5 shadow-[0_3px_0_rgba(0,0,0,0.05)]"
           >
-            <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
-              <span>{STAGE_LABELS[match.stage] || match.stage}</span>
+            <div className="flex items-center justify-between text-sm text-[#4a4539] mb-3">
+              <span className="font-display uppercase tracking-wide">{STAGE_LABELS[match.stage] || match.stage}</span>
               <span>{formatDate(match.utcDate)}</span>
             </div>
 
@@ -153,7 +153,7 @@ export default function PredictionGrid({
                 isPredicted={predictedWinner === 'HOME'}
                 isActual={actualWinner === 'HOME'}
               />
-              <span className="text-gray-500 font-bold">VS</span>
+              <span className="text-[#4a4539] font-display text-lg">VS</span>
               <TeamBox
                 team={match.awayTeam}
                 placeholder={match.placeholderB}
@@ -162,20 +162,23 @@ export default function PredictionGrid({
               />
             </div>
 
-            <div className="mt-3 text-sm text-center text-gray-300">
-              Predicción:{' '}
-              <span className="font-medium text-white">
-                {predictedWinnerLabel(match, predictedWinner)}
-              </span>
+            <div className="mt-4 text-center">
+              <p className="text-[#4a4539]">
+                Predicción:{' '}
+                <span className="font-semibold text-[#1a1a1a]">
+                  {predictedWinnerLabel(match, predictedWinner)}
+                </span>
+              </p>
+              {hasResult && (
+                <p className="text-sm text-[#4a4539] mt-1">
+                  Resultado real:{' '}
+                  <span className="font-semibold text-[#1a5f2a]">{winnerLabel(match)}</span>
+                  {' '}({match.homeScore} - {match.awayScore})
+                </p>
+              )}
             </div>
 
-            {hasResult && (
-              <div className="mt-2 text-xs text-center text-gray-400">
-                Resultado: {winnerLabel(match)}
-              </div>
-            )}
-
-            <div className="mt-3 flex justify-center">
+            <div className="mt-4 flex justify-center">
               <StatusBadge points={pred.pointsEarned} hasResult={hasResult} />
             </div>
           </div>

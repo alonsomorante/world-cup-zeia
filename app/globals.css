@@ -1,128 +1,209 @@
 @import "tailwindcss";
 
 :root {
-  --pitch-green: #1a5f2a;
-  --pitch-light: #2d8a3e;
-  --sky-blue: #4facfe;
-  --sun-gold: #ffd700;
-  --card-cream: #fffdf5;
-  --ink: #1a1a2e;
+  --paper: #f7f3e8;
+  --paper-dark: #efe9d8;
+  --ink: #1a1a1a;
+  --ink-soft: #4a4539;
+  --green: #1a5f2a;
+  --green-light: #2d8a3e;
+  --gold: #ffd700;
+  --gold-dark: #d4af37;
+  --red: #d93025;
+  --blue: #1e40af;
+  --white: #ffffff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-quicksand);
-  --font-display: var(--font-bungee);
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
 }
 
 body {
-  background: linear-gradient(135deg, #1a5f2a 0%, #2d8a3e 40%, #4facfe 100%);
-  background-size: 400% 400%;
-  animation: stadiumSky 15s ease infinite;
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle at 20% 10%, rgba(255, 215, 0, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 80% 90%, rgba(26, 95, 42, 0.06) 0%, transparent 40%),
+    linear-gradient(180deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 24px;
   color: var(--ink);
-  font-family: var(--font-quicksand), system-ui, sans-serif;
-}
-
-@keyframes stadiumSky {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  font-family: var(--font-body), Georgia, serif;
 }
 
 .font-display {
-  font-family: var(--font-bungee), Impact, sans-serif;
+  font-family: var(--font-display), Impact, sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .font-body {
-  font-family: var(--font-quicksand), system-ui, sans-serif;
+  font-family: var(--font-body), Georgia, serif;
 }
 
-/* Ticket perforations */
-.ticket-notch::before,
-.ticket-notch::after {
-  content: "";
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  background: inherit;
-  border-radius: 50%;
-  z-index: 10;
+/* Sticker card effect */
+.sticker-card {
+  background: var(--white);
+  border: 3px solid var(--gold-dark);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 0 rgba(0,0,0,0.08),
+    0 8px 24px rgba(0,0,0,0.06);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.ticket-notch-left::before {
-  top: 50%;
-  left: -12px;
-  transform: translateY(-50%);
+.sticker-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 rgba(0,0,0,0.08),
+    0 12px 32px rgba(0,0,0,0.1);
 }
 
-.ticket-notch-right::after {
-  top: 50%;
-  right: -12px;
-  transform: translateY(-50%);
+/* Dashed ticket border */
+.ticket-border {
+  border: 2px dashed var(--gold-dark);
+  border-radius: 8px;
 }
 
-/* Field lines pattern */
-.field-lines {
-  background-image: repeating-linear-gradient(
+/* Field stripe pattern */
+.field-stripes {
+  background: repeating-linear-gradient(
     90deg,
-    rgba(255, 255, 255, 0.08) 0px,
-    rgba(255, 255, 255, 0.08) 2px,
-    transparent 2px,
-    transparent 80px
+    var(--green) 0px,
+    var(--green) 40px,
+    var(--green-light) 40px,
+    var(--green-light) 80px
   );
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-12px) rotate(3deg); }
+/* Number badge */
+.number-badge {
+  background: var(--gold);
+  color: var(--ink);
+  border: 2px solid var(--gold-dark);
+  border-radius: 50%;
+  font-family: var(--font-display), Impact, sans-serif;
 }
 
-@keyframes floatReverse {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(12px) rotate(-3deg); }
+/* Button primary */
+.btn-primary {
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-display), Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 0 #0f3a1a;
+  transition: all 0.15s ease;
 }
 
-@keyframes bounceIn {
-  0% { transform: scale(0.8); opacity: 0; }
-  60% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(1); }
+.btn-primary:hover {
+  transform: translateY(1px);
+  box-shadow: 0 3px 0 #0f3a1a;
 }
 
-.animate-float { animation: float 4s ease-in-out infinite; }
-.animate-float-reverse { animation: floatReverse 5s ease-in-out infinite; }
-.animate-bounce-in { animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-/* Floating mascot dogs on home page */
-@keyframes floatDog {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-  25% {
-    transform: translateY(-15px) rotate(2deg) scale(1.05);
-  }
-  50% {
-    transform: translateY(0) rotate(0deg) scale(1);
-  }
-  75% {
-    transform: translateY(15px) rotate(-2deg) scale(0.95);
-  }
+.btn-primary:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 #0f3a1a;
 }
 
-.floating-dog {
-  animation-name: floatDog;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
+/* Button secondary */
+.btn-secondary {
+  background: var(--gold);
+  color: var(--ink);
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-display), Impact, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: 0 4px 0 var(--gold-dark);
+  transition: all 0.15s ease;
 }
 
-.floating-dog:nth-child(odd) {
-  filter: hue-rotate(-5deg) saturate(1.1);
+.btn-secondary:hover {
+  transform: translateY(1px);
+  box-shadow: 0 3px 0 var(--gold-dark);
 }
 
-.floating-dog:nth-child(3n) {
-  filter: sepia(0.2) saturate(1.2);
+/* Input fields */
+.form-input {
+  background: var(--white);
+  border: 2px solid var(--paper-dark);
+  border-radius: 8px;
+  color: var(--ink);
+  font-family: var(--font-body), Georgia, serif;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.floating-dog:nth-child(4n) {
-  filter: contrast(1.05) brightness(1.05);
+.form-input:focus {
+  outline: none;
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(26, 95, 42, 0.1);
+}
+
+/* Team selection buttons in admin */
+.team-option {
+  background: var(--white);
+  border: 2px solid var(--paper-dark);
+  border-radius: 12px;
+  transition: all 0.15s ease;
+}
+
+.team-option:hover:not(:disabled) {
+  border-color: var(--green);
+  transform: translateY(-1px);
+}
+
+.team-option.selected {
+  border-color: var(--green);
+  background: rgba(26, 95, 42, 0.08);
+  box-shadow: 0 0 0 3px rgba(26, 95, 42, 0.15);
+}
+
+.team-option.draw {
+  background: var(--paper-dark);
+  border-style: dashed;
+}
+
+.team-option.draw.selected {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: var(--gold-dark);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.25);
+}
+
+/* Status badges */
+.badge-hit {
+  background: var(--green);
+  color: var(--white);
+}
+
+.badge-miss {
+  background: var(--red);
+  color: var(--white);
+}
+
+.badge-pending {
+  background: var(--paper-dark);
+  color: var(--ink-soft);
+}
+
+/* Animations */
+@keyframes stamp {
+  0% { transform: scale(1.5); opacity: 0; }
+  50% { transform: scale(0.95); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-stamp {
+  animation: stamp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
 }

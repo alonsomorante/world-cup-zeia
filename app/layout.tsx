@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Bungee, Quicksand } from "next/font/google";
+import { Bebas_Neue, Crimson_Pro } from "next/font/google";
 import "./globals.css";
 
-const bungee = Bungee({
+const bebasNeue = Bebas_Neue({
   weight: "400",
-  variable: "--font-bungee",
+  variable: "--font-display",
   subsets: ["latin"],
 });
 
-const quicksand = Quicksand({
-  variable: "--font-quicksand",
+const crimsonPro = Crimson_Pro({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
@@ -26,9 +26,11 @@ export default function RootLayout({
   return (
     <html
       lang="es"
-      className={`${bungee.variable} ${quicksand.variable} h-full antialiased`}
+      className={`${bebasNeue.variable} ${crimsonPro.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-body">{children}</body>
+      <body className="min-h-full flex flex-col font-body bg-[#f7f3e8] text-[#1a1a1a]">
+        {children}
+      </body>
     </html>
   );
 }

@@ -31,40 +31,36 @@ function TeamRow({
   team,
   placeholder,
   score,
-  highlight,
+  isWinner,
 }: {
   team?: Team | null
   placeholder?: string | null
   score?: number | null
-  highlight?: boolean
+  isWinner?: boolean
 }) {
   const name = team?.name || placeholder || 'TBD'
   const flag = getFlagUrl(team?.code)
 
   return (
-    <div className="flex items-center justify-between gap-2 py-1">
+    <div className={`flex items-center justify-between gap-2 py-2 px-3 rounded-lg ${isWinner ? 'bg-[#1a5f2a]/10' : ''}`}>
       <div className="flex items-center gap-2 min-w-0">
         {flag ? (
           <Image
             src={flag}
             alt={name}
-            width={20}
-            height={14}
-            className="rounded-sm object-cover shrink-0"
+            width={24}
+            height={16}
+            className="rounded-sm object-cover shrink-0 shadow-sm"
           />
         ) : (
-          <div className="w-5 h-3.5 rounded-sm bg-[#2a2a2a] shrink-0" />
+          <div className="w-6 h-4 rounded-sm bg-[#efe9d8] shrink-0" />
         )}
-        <span
-          className={`text-sm font-medium truncate ${
-            highlight ? 'text-[#22c55e]' : 'text-white'
-          }`}
-        >
+        <span className={`text-sm font-medium truncate ${isWinner ? 'text-[#1a5f2a] font-semibold' : 'text-[#1a1a1a]'}`}>
           {name}
         </span>
       </div>
       {score !== undefined && score !== null && (
-        <span className="text-sm font-bold tabular-nums shrink-0 text-white">
+        <span className={`text-sm font-bold tabular-nums shrink-0 ${isWinner ? 'text-[#1a5f2a]' : 'text-[#4a4539]'}`}>
           {score}
         </span>
       )}
@@ -72,33 +68,28 @@ function TeamRow({
   )
 }
 
-function MatchCard({
-  match,
-  extra,
-}: {
-  match: MatchWithTeams
-  extra?: React.ReactNode
-}) {
-  const hasResult = match.winner !== null
+function MatchCard({ match, extra }: { match: MatchWithTeams; extra?: React.ReactNode }) {
+  const homeWinner = match.winner === 'HOME'
+  const awayWinner = match.winner === 'AWAY'
 
   return (
-    <div
-      className={`bg-[#1e1e1e] rounded-xl border border-[#2a2a2a] p-3 ${
-        hasResult ? 'border-l-4 border-l-[#22c55e]' : ''
-      }`}
-    >
-      <div className="text-[10px] text-gray-500 mb-1">{formatDate(match.utcDate)}</div>
+    <div className="bg-white rounded-xl border-2 border-[#efe9d8] p-3 shadow-[0_3px_0_rgba(0,0,0,0.05)] hover:border-[#1a5f2a] transition-colors">
+      <div className="text-xs font-display uppercase tracking-wide text-[#4a4539] mb-2">
+        {formatDate(match.utcDate)}
+      </div>
       <TeamRow
         team={match.homeTeam}
         placeholder={match.placeholderA}
         score={match.homeScore}
+        isWinner={homeWinner}
       />
       <TeamRow
         team={match.awayTeam}
         placeholder={match.placeholderB}
         score={match.awayScore}
+        isWinner={awayWinner}
       />
-      {extra && <div className="mt-2 pt-2 border-t border-[#2a2a2a]">{extra}</div>}
+      {extra && <div className="mt-2 pt-2 border-t border-dashed border-[#efe9d8]">{extra}</div>}
     </div>
   )
 }
@@ -125,16 +116,10 @@ function RoundSection({
 
   return (
     <div className="mb-8">
-      <h2 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">
-        {title}
-      </h2>
+      <h2 className="font-display text-2xl text-[#1a5f2a] uppercase tracking-wide mb-4">{title}</h2>
       <div className={`grid ${gridCols} gap-3`}>
         {matches.map((match) => (
-          <MatchCard
-            key={match.id}
-            match={match}
-            extra={renderExtra?.(match)}
-          />
+          <MatchCard key={match.id} match={match} extra={renderExtra?.(match)} />
         ))}
       </div>
     </div>
@@ -188,18 +173,8 @@ export default function BracketView({
         renderExtra={renderExtra}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <RoundSection
-          title={STAGE_LABELS.FINAL}
-          matches={byStage.FINAL}
-          columns={1}
-          renderExtra={renderExtra}
-        />
-        <RoundSection
-          title={STAGE_LABELS.THIRD_PLACE}
-          matches={byStage.THIRD_PLACE}
-          columns={1}
-          renderExtra={renderExtra}
-        />
+        <RoundSection title={STAGE_LABELS.FINAL} matches={byStage.FINAL} columns={1} renderExtra={renderExtra} />
+        <RoundSection title={STAGE_LABELS.THIRD_PLACE} matches={byStage.THIRD_PLACE} columns={1} renderExtra={renderExtra} />
       </div>
     </>
   )

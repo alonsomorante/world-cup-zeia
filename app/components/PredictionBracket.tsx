@@ -41,16 +41,16 @@ export default function PredictionBracket({
 
         return (
           <div className="text-xs text-center">
-            <div className="text-gray-400">
+            <div className="text-[#4a4539]">
               Predicción:{' '}
-              <span className="text-white font-medium">
+              <span className="font-semibold text-[#1a1a1a]">
                 {predictedWinnerLabel(match, pred.predictedWinner)}
               </span>
             </div>
             {hasResult && (
               <div
-                className={`mt-1 font-medium ${
-                  isHit ? 'text-[#22c55e]' : isMiss ? 'text-red-400' : 'text-gray-400'
+                className={`mt-1 font-display uppercase tracking-wide ${
+                  isHit ? 'text-[#1a5f2a]' : isMiss ? 'text-[#d93025]' : 'text-[#4a4539]'
                 }`}
               >
                 {isHit ? `+${pred.pointsEarned} pt` : 'Falló'}
