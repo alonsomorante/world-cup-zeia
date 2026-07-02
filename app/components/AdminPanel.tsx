@@ -448,18 +448,6 @@ export default function AdminPanel({
                           label="Local"
                         />
 
-                        <button
-                          type="button"
-                          onClick={() => updateWinner(match.id, 'DRAW')}
-                          disabled={locked}
-                          className={`team-option draw px-3 flex flex-col items-center justify-center gap-1 ${
-                            winner === 'DRAW' ? 'selected' : ''
-                          } disabled:opacity-60`}
-                        >
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Empate</span>
-                          <span className="text-xl">⚖️</span>
-                        </button>
-
                         <TeamOption
                           team={match.awayTeam}
                           placeholder={match.placeholderB}
