@@ -82,15 +82,12 @@ export async function savePredictions(
 ): Promise<{ success: true } | { error: string }> {
   await requireAdmin()
 
-  const now = new Date()
-
   for (const pred of predictions) {
     const match = await prisma.match.findUnique({
       where: { id: pred.matchId },
     })
 
     if (!match) continue
-    if (new Date(match.utcDate) <= now) continue
 
     await prisma.prediction.upsert({
       where: {
@@ -132,10 +129,6 @@ export async function deletePrediction(
 
   if (!prediction) {
     return { error: 'Predicción no encontrada' }
-  }
-
-  if (new Date(prediction.match.utcDate) <= new Date()) {
-    return { error: 'No se puede borrar una predicción de un partido cerrado' }
   }
 
   await prisma.prediction.delete({ where: { id: predictionId } })
