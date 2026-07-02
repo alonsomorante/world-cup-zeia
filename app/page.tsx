@@ -37,9 +37,9 @@ export default async function HomePage() {
           <div className="inline-block bg-[#1a5f2a] text-white px-4 py-1 rounded-full text-sm font-display uppercase tracking-wider mb-3">
             Mundial 2026
           </div>
-          <h1 className="font-display text-5xl text-[#1a1a1a] mb-2">Tabla de Posiciones</h1>
+          <h1 className="font-display text-5xl text-[#1a1a1a] mb-2">Así van las predicciones</h1>
           <p className="text-[#4a4539] text-lg">
-            Así van tus compañeros en la quiniela
+            Tabla de posiciones de tus compañeros
           </p>
         </div>
 

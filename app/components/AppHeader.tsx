@@ -11,7 +11,7 @@ export default function AppHeader({ isAdmin = false }: { isAdmin?: boolean }) {
             26
           </div>
           <span className="font-display text-2xl text-[#1a1a1a] tracking-wide">
-            QUINIELA MUNDIAL
+            MUNDIAL ZEIA
           </span>
         </Link>
 
