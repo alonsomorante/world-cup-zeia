@@ -24,14 +24,25 @@ function determineWinner(match: {
   Winner: 'HOME_TEAM' | 'AWAY_TEAM' | 'DRAW' | null
   HomeTeamScore: number | null
   AwayTeamScore: number | null
+  HomeTeamPenaltyScore: number | null
+  AwayTeamPenaltyScore: number | null
 }): MatchWinner | null {
   if (match.Winner === 'HOME_TEAM') return 'HOME'
   if (match.Winner === 'AWAY_TEAM') return 'AWAY'
-  if (match.Winner === 'DRAW') return 'DRAW'
 
   if (match.HomeTeamScore !== null && match.AwayTeamScore !== null) {
     if (match.HomeTeamScore > match.AwayTeamScore) return 'HOME'
     if (match.HomeTeamScore < match.AwayTeamScore) return 'AWAY'
+
+    // Tied after regular/extra time: decide by penalties if available.
+    if (
+      match.HomeTeamPenaltyScore !== null &&
+      match.AwayTeamPenaltyScore !== null
+    ) {
+      if (match.HomeTeamPenaltyScore > match.AwayTeamPenaltyScore) return 'HOME'
+      if (match.HomeTeamPenaltyScore < match.AwayTeamPenaltyScore) return 'AWAY'
+    }
+
     return 'DRAW'
   }
 
